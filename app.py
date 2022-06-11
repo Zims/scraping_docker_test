@@ -2,7 +2,7 @@
 from flask import Flask, request, jsonify
 import sqlite3
 from datetime import datetime
-
+from scraper.main import Database, AdScraper
 
 app = Flask(__name__)
 
@@ -10,17 +10,20 @@ app = Flask(__name__)
 conn = sqlite3.connect('ss_all_with_class.sqlite3', check_same_thread=False)
 c = conn.cursor()
 
-# queries
-c.execute("SELECT * FROM ss_all_new ORDER BY id DESC")
-# get 20 newest records
-c.execute("SELECT * FROM ss_all_new ORDER BY id DESC LIMIT 50")
-
-all_appartments = [dict(zip([key[0] for key in c.description], row)) for row in c.fetchall()]
+# # queries
+# c.execute("SELECT * FROM ss_all_new ORDER BY id DESC")
+# # get 20 newest records
+# c.execute("SELECT * FROM ss_all_new ORDER BY id DESC LIMIT 50")
+# all_appartments = [dict(zip([key[0] for key in c.description], row)) for row in c.fetchall()]
 
 # Endpoints #
 
+@app.get("/")
+async def index():
+    return '<a href="/today">Todays listings</a>'
 
 
+    
 @app.get("/today")
 async def today():
     todays_date = datetime.now().strftime("%Y-%m-%d")
@@ -31,7 +34,24 @@ async def today():
     # return todays_ads as json format
     return todays_ads
     
+@app.get("/update")
+async def update():
+    db = Database()
+    db.remove_old_records()
+    ad_scraper = AdScraper()
+    ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 4)))
     
+    db.add_new_records(ad_scraper.detail_list)
+    # todays records count
+    db.cur.execute('''SELECT COUNT(*) FROM ss_all_new WHERE date_added = date('now')''')
+    todays_records = db.cur.fetchall()
+    today = todays_records[0][0]
+
+    return '<h1>Scraper is running...</h1>' + '<h2>Today\'s records: ' + str(today) + '</h2>' + '<a href="/today">Todays listings</a>'
+
+    
+
+
 
 # @app.get("/places")
 # async def places(request: Request):
@@ -69,3 +89,6 @@ async def today():
 #         c.execute("SELECT * FROM ss_all_new WHERE district = ? ORDER BY added_to_db DESC LIMIT 300", (place,))
 #         place_appartments = [dict(zip([key[0] for key in c.description], row)) for row in c.fetchall()]
 #         return place_appartments
+
+if __name__ == "__main__":
+    app.run(debug=True)
