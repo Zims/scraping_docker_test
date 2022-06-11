@@ -10,19 +10,10 @@ app = Flask(__name__)
 conn = sqlite3.connect('ss_all_with_class.sqlite3', check_same_thread=False)
 c = conn.cursor()
 
-# # queries
-# c.execute("SELECT * FROM ss_all_new ORDER BY id DESC")
-# # get 20 newest records
-# c.execute("SELECT * FROM ss_all_new ORDER BY id DESC LIMIT 50")
-# all_appartments = [dict(zip([key[0] for key in c.description], row)) for row in c.fetchall()]
-
 # Endpoints #
-
 @app.get("/")
 async def index():
     return '<a href="/today">Todays listings</a>'
-
-
     
 @app.get("/today")
 async def today():
