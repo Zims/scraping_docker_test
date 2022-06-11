@@ -237,9 +237,9 @@ class Database:
         self.cur.execute('''SELECT COUNT(*) FROM ss_all_new WHERE date_added = date('now')''')
         todays_records = self.cur.fetchall()
         print('Todays records: ', todays_records[0][0])
-# # Database connection
-# conn = sqlite3.connect('ss_all_with_class.sqlite3', check_same_thread=False)
-# c = conn.cursor()
+# Database connection
+conn = sqlite3.connect('ss_all_with_class.sqlite3', check_same_thread=False)
+c = conn.cursor()
 
 # Endpoints #
 @app.get("/")
