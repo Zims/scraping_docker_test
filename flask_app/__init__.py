@@ -6,9 +6,9 @@ from classes import Database, AdScraper
 
 app = Flask(__name__)
 
-# Database connection
-conn = sqlite3.connect('ss_all_with_class.sqlite3', check_same_thread=False)
-c = conn.cursor()
+# # Database connection
+# conn = sqlite3.connect('ss_all_with_class.sqlite3', check_same_thread=False)
+# c = conn.cursor()
 
 # Endpoints #
 @app.get("/")
@@ -25,20 +25,20 @@ async def today():
     # return todays_ads as json format
     return todays_ads
     
-@app.get("/update")
-async def update():
-    db = Database()
-    db.remove_old_records()
-    ad_scraper = AdScraper()
-    ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 4)))
+# @app.get("/update")
+# async def update():
+#     db = Database()
+#     db.remove_old_records()
+#     ad_scraper = AdScraper()
+#     ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 4)))
     
-    db.add_new_records(ad_scraper.detail_list)
-    # todays records count
-    db.cur.execute('''SELECT COUNT(*) FROM ss_all_new WHERE date_added = date('now')''')
-    todays_records = db.cur.fetchall()
-    today = todays_records[0][0]
+#     db.add_new_records(ad_scraper.detail_list)
+#     # todays records count
+#     db.cur.execute('''SELECT COUNT(*) FROM ss_all_new WHERE date_added = date('now')''')
+#     todays_records = db.cur.fetchall()
+#     today = todays_records[0][0]
 
-    return '<h1>Scraper is running...</h1>' + '<h2>Today\'s records: ' + str(today) + '</h2>' + '<a href="/today">Todays listings</a>'
+#     return '<h1>Scraper is running...</h1>' + '<h2>Today\'s records: ' + str(today) + '</h2>' + '<a href="/today">Todays listings</a>'
 
     
 
