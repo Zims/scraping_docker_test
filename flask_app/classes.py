@@ -231,25 +231,25 @@ class Database:
         todays_records = self.cur.fetchall()
         print('Todays records: ', todays_records[0][0])
 
-# def main_run():
-#     counter = 599
-#     while True:
-#         db = Database()
-#         db.remove_old_records()
-#         ad_scraper = AdScraper()
+def main_run():
+    counter = 599
+    while True:
+        db = Database()
+        db.remove_old_records()
+        ad_scraper = AdScraper()
 
-#         if counter % 600 == 0:
-#             ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 25)))
-#         elif counter % 100 == 0:
-#             ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 15)))
-#         elif counter % 10 == 0:
-#             ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 8)))
-#         else:
-#             ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 4)))
+        if counter % 600 == 0:
+            ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 25)))
+        elif counter % 100 == 0:
+            ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 15)))
+        elif counter % 10 == 0:
+            ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 8)))
+        else:
+            ad_scraper.scrape_single_page(ad_scraper.get_urls_from_site(range(0, 4)))
 
-#         counter += 1
-#         db.add_new_records(ad_scraper.detail_list)
-#         db.remove_old_records()
-#         time.sleep(30)
+        counter += 1
+        db.add_new_records(ad_scraper.detail_list)
+        db.remove_old_records()
+        time.sleep(30)
 
-# main_run()
+main_run()
